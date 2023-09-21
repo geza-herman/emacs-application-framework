@@ -918,11 +918,13 @@ class BrowserBuffer(Buffer):
             self.settings.setFontSize(QWebEngineSettings.FontSize.DefaultFontSize, self.font_size)
             self.settings.setFontSize(QWebEngineSettings.FontSize.DefaultFixedFontSize, self.fixed_font_size)
 
+            if type(arguments) is list and 'no_img_autoload' in arguments:
+                self.settings.setAttribute(QWebEngineSettings.WebAttribute.AutoLoadImages, False)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.LocalStorageEnabled, True)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.FullScreenSupportEnabled, True)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.DnsPrefetchEnabled, True)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.FocusOnNavigationEnabled, True)
-            self.settings.setAttribute(QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls, True)
+            self.settings.setAttribute(QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls, False)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.LocalContentCanAccessFileUrls, True)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.AllowRunningInsecureContent, True)
             self.settings.setAttribute(QWebEngineSettings.WebAttribute.AllowGeolocationOnInsecureOrigins, True)
@@ -1679,6 +1681,12 @@ class BrowserBuffer(Buffer):
         self.theme_background_color = get_emacs_theme_background()
         self.buffer_widget.eval_js("document.body.style.background = '{}'; document.body.style.color = '{}'".format(
             self.theme_background_color, self.theme_foreground_color))
+
+    @interactive
+    def set_local_content_can_access_remote_urls(self):
+        self.settings.setAttribute(QWebEngineSettings.WebAttribute.AutoLoadImages, True)
+        self.settings.setAttribute(QWebEngineSettings.WebAttribute.LocalContentCanAccessRemoteUrls, True)
+        self.refresh_page()
 
 class ZoomSizeDb(object):
     def __init__(self, dbpath):
