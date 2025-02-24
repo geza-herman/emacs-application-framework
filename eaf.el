@@ -1943,7 +1943,7 @@ You can configure a blacklist using `eaf-find-file-ext-blacklist'"
 (advice-add 'watch-other-window-internal :around
             #'eaf--watch-other-window-internal)
 
-(defun eaf--find-file (orig-fn file diredp &rest args)
+(defun eaf--find-file (orig-fn file diredp &optional args)
   (let ((fn (if (commandp 'eaf-open)
                 #'(lambda (file)
                     (eaf-open file))
